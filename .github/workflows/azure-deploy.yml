@@ -9,6 +9,7 @@ on:
 env:
   AZURE_WEBAPP_NAME: blood-backend-api
   JAVA_VERSION: '17'
+  JAR_NAME: blood-donor-finder-0.0.1-SNAPSHOT.jar
 
 jobs:
 
@@ -27,13 +28,18 @@ jobs:
           cache: maven
 
       - name: Build Spring Boot project
-        run: mvn clean package -DskipTests
+        run: ./mvnw clean package -DskipTests
 
+      - name: Verify JAR
+        run: |
+          ls -lh target/${{ env.JAR_NAME }}
+          echo "Build successful"
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: java-app
-          path: target/*.jar
+          path: target/${{ env.JAR_NAME }}
+          retention-days: 1
 
 
   deploy:
