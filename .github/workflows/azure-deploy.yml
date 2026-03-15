@@ -61,11 +61,27 @@ jobs:
       - name: Show files
         run: ls -lh
 
-      - name: Deploy to Azure Web App
+      - name: Deploy to Azure Web App (Publish Profile)
+        if: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE != '' }}
         uses: azure/webapps-deploy@v3
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: '*.jar'
+
+      - name: Login to Azure (Service Principal)
+        if: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE == '' }}
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_91C066435FC742FBAEA7F1167CD62964 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_25F6EB2026FF4397AB4D17039C3DD90B }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_443A9F3E08AA4EAF86439FE73D6CC347 }}
+
+      - name: Deploy to Azure Web App (Azure Login)
+        if: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE == '' }}
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
           package: '*.jar'
 
       - name: Deployment completed
