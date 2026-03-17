@@ -20,7 +20,7 @@ import com.example.demo.service.BloodDonorService;
 
 @RestController
 @RequestMapping("/api/donors")
-@CrossOrigin(origins = {"http://localhost:3000", "https://blood-donor-finder-frontend.vercel.app"})
+@CrossOrigin(origins = {"http://localhost:3000", "https://delightful-hill-05e272300.1.azurestaticapps.net"})
 public class BloodDonorController {
     
     private final BloodDonorService bloodDonorService;

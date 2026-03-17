@@ -654,6 +654,10 @@ jobs:
   build-and-push:
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: read
+      packages: write
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -661,22 +665,21 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      - name: Login to Docker Hub
+      - name: Login to GitHub Container Registry
         uses: docker/login-action@v2
-        if: secrets.DOCKERHUB_USERNAME != '' && secrets.DOCKERHUB_TOKEN != ''
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
-        if: secrets.DOCKERHUB_USERNAME != '' && secrets.DOCKERHUB_TOKEN != ''
         with:
           context: .
           push: true
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/blood-donor-finder-backend:latest
-            ${{ secrets.DOCKERHUB_USERNAME }}/blood-donor-finder-backend:${{ github.sha }}
+            ghcr.io/${{ github.repository_owner }}/blood-donor-finder-backend:latest
+            ghcr.io/${{ github.repository_owner }}/blood-donor-finder-backend:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -684,21 +687,17 @@ jobs:
         run: echo "Docker image build completed successfully"
 ```
 
-### Docker Hub Setup
+### GitHub Container Registry Setup
 
-#### Step 1: Create Docker Hub Account
-1. Go to [hub.docker.com](https://hub.docker.com)
-2. Sign up for free account
-3. Create repository: `blood-donor-finder-backend`
+#### Step 1: Enable package publishing
+1. Open the GitHub repository settings
+2. Ensure GitHub Actions has permission to read and write packages
+3. Push to `main` to publish `ghcr.io/<owner>/blood-donor-finder-backend`
 
-#### Step 2: Generate Access Token
-1. Account Settings → Security → New Access Token
-2. Copy the token
-
-#### Step 3: Add GitHub Secrets
-Add these secrets to your repository:
-- `DOCKERHUB_USERNAME`: Your Docker Hub username
-- `DOCKERHUB_TOKEN`: Your access token
+#### Step 2: Authenticate locally when needed
+```bash
+echo <YOUR_GITHUB_TOKEN> | docker login ghcr.io -u <YOUR_GITHUB_USERNAME> --password-stdin
+```
 
 ### Docker Image Optimization
 

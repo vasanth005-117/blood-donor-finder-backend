@@ -85,4 +85,4 @@ Frontend is built using React and deployed on Vercel.
 https://github.com/vasanth005-117/blood-donor-finder-frontend.git
 
 👉 Live Frontend URL:
-https://blood-donor-finder-frontend.vercel.app
+https://delightful-hill-05e272300.1.azurestaticapps.net

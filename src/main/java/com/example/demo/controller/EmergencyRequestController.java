@@ -24,7 +24,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/emergency-requests")
-@CrossOrigin(origins = {"http://localhost:3000", "https://blood-donor-finder-frontend.vercel.app"})
+@CrossOrigin(origins = {"http://localhost:3000", "https://delightful-hill-05e272300.1.azurestaticapps.net"})
 @RequiredArgsConstructor
 public class EmergencyRequestController {
     

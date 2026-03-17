@@ -7,6 +7,8 @@
 **Runtime Stack**: Java 17 (Java SE)  
 **Region**: Choose based on your preference  
 
+> This repository is a Spring Boot backend. Do not use Azure Static Web Apps CI/CD here. Static Web Apps is for frontend/static sites and will fail in this repo because there is no Node application or `package.json` in the backend workspace.
+
 ---
 
 ## 📋 Deployment Steps
@@ -107,6 +109,8 @@ git push origin main
 
 Or trigger manually in GitHub Actions tab.
 
+The workflow file for this backend deployment is `.github/workflows/azure-deploy.yml` and it expects the repository secret `AZURE_WEBAPP_PUBLISH_PROFILE`.
+
 ---
 
 ## ⚙️ Application Configuration
@@ -157,12 +161,14 @@ SPRING_DATASOURCE_PASSWORD=<YourPassword>
 2. ❌ Incorrect startup command
 3. ❌ Wrong Java version
 4. ❌ Missing publish profile secret
+5. ❌ Using an Azure Static Web Apps workflow in the backend repository
 
 **Solutions:**
 1. ✅ Verify JAR exists in workflow logs
 2. ✅ Set correct startup command (see above)
 3. ✅ Ensure Azure uses Java 17
 4. ✅ Verify `AZURE_WEBAPP_PUBLISH_PROFILE` secret exists
+5. ✅ Use Azure App Service deployment for this Spring Boot JAR, not `Azure/static-web-apps-deploy@v1`
 
 ### Issue: "Application not starting"
 
